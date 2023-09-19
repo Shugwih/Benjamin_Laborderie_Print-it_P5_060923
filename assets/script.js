@@ -23,8 +23,7 @@ const slides = [
 
 //ARROW
 const leftArrow = document.querySelector(".arrow_left"),
-	rightArrow = document.querySelector(".arrow_right"),
-	arrow = document.querySelectorAll(".arrow"); //ATTENTION TODO
+	rightArrow = document.querySelector(".arrow_right");
 
 //SLIDES ELEMENTS
 const slideElement = slides.length -1, // index 0 départ + -1 parcequ'il reste 3 img et pas 4
@@ -34,20 +33,46 @@ let currentIndex = 0; // point de départ
 
 //DOT
 const containerDots = document.querySelector(".dots"),
-    eachDot = `<span class="dot"></span>`;
+    eachDot = `<span class="dot"></span>`,
+	dotSelected = `<span class="dot dot_selected"></span>`;
 
-function activeSlide (select) { //select???
-	bannerImg.src = imgSrc + slides[select]["image"]; //imgSrc devant pour avoir le bon path
-	bannerTxt.innerHTML = slides[select]["tagLine"]
+function dotFunction () {
+	for (let sliderDot = 0; sliderDot <= slideElement; sliderDot++) {
+	  if (sliderDot == 0) {
+		  containerDots.innerHTML += dotSelected;
+	  } else {
+		  containerDots.innerHTML += eachDot;
+	  }
+	}
 };
 
+dotFunction ()
+
+const allDot = document.querySelectorAll('.dot');
+
+function activeSlide () {
+	bannerImg.src = imgSrc + slides[currentIndex]["image"]; //imgSrc devant pour avoir le bon path
+	bannerTxt.innerHTML = slides[currentIndex]["tagLine"];
+	const dot = document.querySelector('.dot_selected');
+	allDot[currentIndex].classList.add("dot_selected")
+	dot.classList.remove("dot_selected")
+};
+
+allDot.forEach((el, index) => el.addEventListener('click', event => {
+	currentIndex = index;
+	activeSlide()
+	})
+);
+
+
+//ARROW
 rightArrow.addEventListener("click", () => {
 	if (currentIndex >= slideElement) {
 		currentIndex = 0;
 	} else {
 		currentIndex++;
 	}
-	activeSlide(currentIndex);
+	activeSlide();
 });
 
 leftArrow.addEventListener("click", () => {
@@ -56,29 +81,5 @@ leftArrow.addEventListener("click", () => {
 	} else {
 		currentIndex--;
 	}
-	activeSlide(currentIndex);
+	activeSlide();
 });
-
-function dotFunction () {
-  for (let sliderDot = 0; sliderDot <= slideElement; sliderDot++) {
-    containerDots.innerHTML += eachDot;
-	console.log(sliderDot)
-  }
-};
-dotFunction ()
-
-dot = document.querySelector(".dot");
-dot.addEventListener("click", () => {
-	console.log(1)
-})
-
-function dotSelect () {
-	for (let sliderDot = 0; sliderDot <= slideElement; sliderDot++) {
-		if (sliderDot === slideElement) {
-			dot.classList.add("dot_selected");
-		} else {
-			dot.classList.remove("dot_selected");
-		}
-	}
-};
-dotSelect()
